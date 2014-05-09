@@ -19,7 +19,7 @@ SerialCommand sCmd_USB(Serial, MAX_SERIAL_COMMANDS);         // (Stream, int max
 // Circular overwriting buffer for samples
 CircularBuffer sampleBuffer(BUFFER_CAPACITY);
 
-byte rawDataRecord[RDATA_NUM_BYTES];
+//byte rawDataRecord[RDATA_NUM_BYTES];
 
 //misc pins
 
@@ -89,14 +89,14 @@ int memoryFree()
 void buffer_raw_data(byte *record, unsigned long *acq_time_micros){
   //store data in the buffer
   //sampleBuffer.write((byte *) acq_time_micros, sizeof(unsigned long));
-  sampleBuffer.write(record, RDATA_NUM_BYTES);
+  //sampleBuffer.write(record, RDATA_NUM_BYTES);
 }
 
 void send_raw_data(byte *record, unsigned long acq_time_micros, Print &output){
   //output.write(acq_time_micros);
-  for(int i = 0; i < RDATA_NUM_BYTES; i++){
-     output.write(record[i]);  //output the data as binary
-  }
+  //for(int i = 0; i < RDATA_NUM_BYTES; i++){
+  //   output.write(record[i]);  //output the data as binary
+  //}
 }
 
 /******************************************************************************/
