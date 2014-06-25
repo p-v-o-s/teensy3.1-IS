@@ -29,9 +29,13 @@ void setup() {
   //----------------------------------------------------------------------------
   // Setup callbacks for SerialCommand commands
   // over USB interface
-  sCmd_USB.addCommand("SYNTH.FREQ",   SYNTH_FREQ_command);  //get or set the frequency of synthesized wave
-  sCmd_USB.addCommand("SYNTH.START", SYNTH_START_command);  //starts the DAC wave synthesizer
-  sCmd_USB.addCommand("SYNTH.STOP",  SYNTH_STOP_command);   //stops the DAC wave synthesizer
+  sCmd_USB.addCommand("SYNTH.FREQ",       SYNTH_FREQ_command);       //get or set the frequency of synthesized wave
+  sCmd_USB.addCommand("SYNTH.AMP",        SYNTH_AMP_command);        //get or set the amplitude of synthesized wave
+  sCmd_USB.addCommand("SYNTH.SAMPNUM",    SYNTH_SAMPNUM_command);    //get or set the number of samples in the synthesized wave
+  sCmd_USB.addCommand("SYNTH.INTERVAL",   SYNTH_INTERVAL_command);   //get the time interval between samples in the synthesized wave
+  sCmd_USB.addCommand("SYNTH.IS_RUNNING", SYNTH_IS_RUNNING_command); //get state of the synthesizer, 0 = off, 1 = running
+  sCmd_USB.addCommand("SYNTH.START",      SYNTH_START_command);      //starts the DAC wave synthesizer
+  sCmd_USB.addCommand("SYNTH.STOP",       SYNTH_STOP_command);       //stops the DAC wave synthesizer
   sCmd_USB.addCommand("SER.DMODE", SER_DMODE_command); //set the data mode of the serial link
   sCmd_USB.setDefaultHandler(unrecognizedCommand);
   //----------------------------------------------------------------------------
@@ -122,6 +126,77 @@ void SYNTH_FREQ_command(SerialCommand this_scmd) {
       }
       else{ synth.set_freq(freq); }
     }
+  }
+}
+
+void SYNTH_AMP_command(SerialCommand this_scmd) {
+  char *arg = this_scmd.next();
+  float amp;
+  if (arg == NULL){ //get the value
+    this_scmd.println(synth.get_amp());
+  }
+  else{               //set the value
+    errno = 0;
+    amp = strtod(arg, NULL);
+    if (errno != 0){  //parsing error
+      this_scmd.print(F("### Error: SYNTH.AMP parsing argument 'amp': errno = "));
+      this_scmd.println(errno);
+    }
+    else{             //value OK
+      this_scmd.print(F("amp = "));this_scmd.println(amp);
+      if (synth.is_running()){
+        synth.stop();
+        synth.set_amp(amp);
+        synth.start();
+      }
+      else{ synth.set_amp(amp); }
+    }
+  }
+}
+
+void SYNTH_SAMPNUM_command(SerialCommand this_scmd) {
+  char *arg = this_scmd.next();
+  unsigned long sampnum;
+  if (arg == NULL){   //get the value
+    this_scmd.println(synth.get_sampnum());
+  }
+  else{               //set the value
+    errno = 0;
+    sampnum = strtoul(arg, NULL, 10);
+    if (errno != 0){  //parsing error
+      this_scmd.print(F("### Error: SYNTH.SAMPNUM parsing argument 'sampnum': errno = "));
+      this_scmd.println(errno);
+    }
+    else{             //value OK
+      this_scmd.print(F("sampnum = "));this_scmd.println(sampnum);
+      if (synth.is_running()){
+        synth.stop();
+        synth.set_sampnum(sampnum);
+        synth.start();
+      }
+      else{ synth.set_sampnum(sampnum); }
+    }
+  }
+}
+
+void SYNTH_INTERVAL_command(SerialCommand this_scmd) {
+  char *arg = this_scmd.next();
+  if (arg == NULL){ //get the value
+    this_scmd.printf("%f\n",synth.get_interval());
+  }
+  else{               //set the value
+    this_scmd.println(F("### Error: SYNTH.INTERVAL cannot be directly set"));
+  }
+}
+
+void SYNTH_IS_RUNNING_command(SerialCommand this_scmd) {
+  char *arg = this_scmd.next();
+  if (arg == NULL){
+    if (synth.is_running()){this_scmd.println(1);}
+    else                   {this_scmd.println(0);}
+  }
+  else{
+    this_scmd.println(F("### Error: SYNTH.IS_RUNNING requires no arguments"));
   }
 }
 
