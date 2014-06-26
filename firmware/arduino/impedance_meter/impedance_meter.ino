@@ -3,8 +3,7 @@
 *******************************************************************************/
 #include <errno.h>
 #include <SPI.h>
-#include "SerialCommand.h"
-#include "CircularBuffer.h"
+#include <SerialCommand.h>
 #include "DACSynth.h"
 
 #define SERIAL_BAUDRATE 115200
@@ -17,9 +16,6 @@
 /******************************************************************************/
 // Global Objects
 SerialCommand sCmd_USB(Serial, MAX_SERIAL_COMMANDS);         // (Stream, int maxCommands)
-// Circular overwriting buffer for samples
-CircularBuffer sampleBuffer(BUFFER_CAPACITY);
-// DAC Synthesizer
 DACSynthClass synth;
 
 /******************************************************************************/
