@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <SPI.h>
 #include <SerialCommand.h>
-#include "DACSynth.h"
+#include <DACSynth.h>
 
 #define SERIAL_BAUDRATE 115200
 #define BUFFER_CAPACITY 256

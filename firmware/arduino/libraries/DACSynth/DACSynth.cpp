@@ -30,8 +30,17 @@ void DACSynthClass::start() {
   //Serial.println();
   _dac_table.index = 0;
   _running = true;
-  dac_timer.begin(_dac_update_IRC, _dac_table.interval_us);  // intreval is in microseconds
 }
+
+void DACSynthClass::start_continous() {
+  start();
+  dac_timer.begin(_dac_update, _dac_table.interval_us);  // intreval is in microseconds
+}
+
+void DACSynthClass::update() {
+  _dac_update();  // intreval is in microseconds
+}
+
 
 void DACSynthClass::stop() {
   // shut off DAC
@@ -64,8 +73,8 @@ void DACSynthClass::_compute_dac_table(){
 
 
 /******************************************************************************/
-// IRCs
-void _dac_update_IRC() {
+// ISRs
+void _dac_update() {
   _dac_table.index = (_dac_table.index+1) % _dac_table.length;
   analogWrite(DAC_OUTPUT_PIN, _dac_table.data[_dac_table.index]);
 }

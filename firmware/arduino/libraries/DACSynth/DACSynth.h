@@ -25,7 +25,7 @@ struct DACTableType{
 };
 
 // Function Prototypes
-void _dac_update_IRC();
+void _dac_update();
 /*******************************************************************************
   DACSynthClass
   
@@ -46,6 +46,8 @@ public:
   bool  is_running() {return _running;}
   //Functionality methods
   void start();
+  void start_continous();
+  void update();
   void stop();
 private:
   //Helper Functions
