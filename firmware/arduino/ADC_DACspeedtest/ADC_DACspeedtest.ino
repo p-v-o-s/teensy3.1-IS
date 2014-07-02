@@ -68,7 +68,7 @@ void setup() {
     //dacSynth->start_continous();
 
     ///// ADC0 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_0); change all 3.3 to 1.2 if you change the reference
+    adc->setReference(ADC_REF_EXTERNAL, ADC_0); //change all 3.3 to 1.2 if you change the reference
 
     adc->setAveraging(1, ADC_0); // set number of averages
     adc->setResolution(12, ADC_0); // set bits of resolution
@@ -80,7 +80,7 @@ void setup() {
     // with 16 averages, 12 bits resolution and ADC_HIGH_SPEED conversion and sampling it takes about 32.5 us for a conversion
 
     ///// ADC1 ////
-    //adc->setReference(ADC_REF_INTERNAL, ADC_1); change all 3.3 to 1.2 if you change the reference
+    adc->setReference(ADC_REF_EXTERNAL, ADC_1); //change all 3.3 to 1.2 if you change the reference
 
     adc->setAveraging(1, ADC_1); // set number of averages
     adc->setResolution(12, ADC_1); // set bits of resolution
@@ -126,9 +126,9 @@ void loop() {
 /*  }*/
   if(!dmaBuffer0->isEmpty()) { // read the values in the buffer
     //Serial.print("Read pin 0: ");
-    Serial.print(dmaBuffer0->read()*3.3/adc->getMaxValue());
+    Serial.print(dmaBuffer0->read()*1.2/adc->getMaxValue());
     Serial.print(" ");
-    Serial.println(dmaBuffer1->read()*3.3/adc->getMaxValue());
+    Serial.println(dmaBuffer1->read()*1.2/adc->getMaxValue());
     //Serial.println("New value!");
   }
   //adc->analogRead(readPin0, ADC_0);
