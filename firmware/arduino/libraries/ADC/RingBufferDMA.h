@@ -64,7 +64,7 @@ class RingBufferDMA
 
 
         //! Elements of the buffer, aligned to 16 bits
-        int16_t elems[DMA_BUFFER_SIZE] __attribute__((aligned(0x10))); // align to 16 bits
+        int16_t elems[DMA_BUFFER_SIZE] __attribute__((aligned(0x10))) = {111,222,333,444,555,666,777,888}; // align to 16 bits
 
         //! DMA channel of the instance
         uint8_t DMA_channel;
